@@ -1,0 +1,19 @@
+{
+   "name": "ponyrun",
+   "description": "A simple dino-like HTML5-canvas TS game with ponies",
+   "repository": "git@github.com:ponydevs/ponyrun.git",
+   "license": "ISC",
+   "scripts": {
+      "build": "parcel build src/page.html -d public -o index.html"
+   },
+   "devDependencies": {
+      "@types/node": "^13.9.1",
+      "prettier": "^1.19.1",
+      "run-ts": "^1.0.6",
+      "ts-node": "^8.6.2",
+      "typescript": "^3.8.3"
+   },
+   "dependencies": {
+      "parcel": "^1.12.4"
+   }
+}
