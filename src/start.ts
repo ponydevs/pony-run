@@ -1,3 +1,3 @@
-import { setLayout } from './layout/layout';
+import { setLayout } from './page/init';
 
 setLayout();
