@@ -1,4 +1,4 @@
-export interface PonyrunKeyboard {
+export interface PonyKeyboard {
     onJump: RegisterFunction;
     onCrouch: RegisterFunction;
     onCrouchEnd: RegisterFunction;
@@ -6,14 +6,14 @@ export interface PonyrunKeyboard {
 
 export type RegisterFunction = (callback: () => void) => void;
 
-export interface PonyrunDisplay {
-    render: (prop: PonyrunDisplayProp) => void;
+export interface PonyDisplay {
+    render: (prop: PonyDisplayProp) => void;
     bird: SpriteInfo;
     cactus: SpriteInfo;
     runningPony: SpriteInfo;
 }
 
-export interface PonyrunDisplayProp {
+export interface PonyDisplayProp {
     background: Background;
     birdList: Bird[];
     cactusList: Cactus[];

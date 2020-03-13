@@ -1,4 +1,4 @@
-# Ponyrun Changelog
+# Pony Run Changelog
 
 All notable changes to this project will be documented in this file.
 

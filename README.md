@@ -1,4 +1,4 @@
-# Ponyrun
+# Pony Run
 
 A simple like HTML5-canvas TypeScript side-scroller game.
 

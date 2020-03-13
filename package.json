@@ -1,5 +1,5 @@
 {
-   "name": "ponyrun",
+   "name": "pony-run",
    "description": "A simple dino-like HTML5-canvas TS game with ponies",
    "repository": "git@github.com:ponydevs/ponyrun.git",
    "license": "ISC",
