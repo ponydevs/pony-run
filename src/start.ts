@@ -1,3 +1,3 @@
-import { setLayout } from './page/init';
+import { main } from './main';
 
-setLayout();
+main();

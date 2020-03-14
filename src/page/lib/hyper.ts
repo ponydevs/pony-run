@@ -9,12 +9,12 @@
  * @param attribute An object associating keys to values for the created element
  * @param children An array of children elements
  */
-export let h = <K extends keyof HTMLElementTagNameMap>(
+export const h = <K extends keyof HTMLElementTagNameMap>(
     name: K,
     attribute: Record<string, string> = {},
     children: Element[] = [],
 ) => {
-    let elem = document.createElement<K>(name);
+    const elem = document.createElement<K>(name);
 
     Object.entries(attribute).forEach(([name, value]) => {
         if (elem[name] !== undefined) {

@@ -1,9 +1,15 @@
 import { h } from './lib/hyper';
 
-export let setLayout = () => {
+export const init = () => {
+    const canvas = h('canvas');
+
     document.body.appendChild(
         h('h1', {
             textContent: 'Pony Run',
         }),
     );
+
+    document.body.appendChild(canvas);
+
+    return { canvas };
 };
