@@ -6,6 +6,10 @@ export interface PonyInput {
 
 export type RegisterFunction = (callback: () => void) => void;
 
+export interface PonyCore {
+    tick: (delta: number) => void;
+}
+
 export interface PonyDisplay {
     render: (prop: PonyRenderProp) => void;
     bird: SpriteInfo;

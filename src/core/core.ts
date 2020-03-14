@@ -1,11 +1,11 @@
-import { PonyDisplay, PonyInput } from '../type/ponyRun';
+import { PonyDisplay, PonyInput, PonyCore } from '../type/ponyRun';
 
 export interface CoreProp {
     display: PonyDisplay;
     input: PonyInput;
 }
 
-export const createCore = (prop: CoreProp) => {
+export const createCore = (prop: CoreProp): PonyCore => {
     const { display, input } = prop;
 
     // input.onJump ...
