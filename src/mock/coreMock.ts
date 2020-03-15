@@ -4,7 +4,11 @@ import { PonyCore } from '../type/ponyRun';
 const birdSpeed = -1;
 
 export const createCoreMock = (prop: CoreProp): PonyCore => {
-    const { display } = prop;
+    const { display, input } = prop;
+
+    input.onCrouch(() => console.log('crouch'));
+    input.onCrouchEnd(() => console.log('crouchEnd'));
+    input.onJump(() => console.log('jump'));
 
     let birdSpriteIndex = 0;
     let ponySpriteIndex = 0;
