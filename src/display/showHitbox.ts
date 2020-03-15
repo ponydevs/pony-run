@@ -7,7 +7,7 @@ const drawHitbox = (
     info: SpriteInfo,
 ) => {
     ctx.strokeStyle = '#00FF00';
-    let hb = info.hitbox;
+    const hb = info.hitbox;
     ctx.strokeRect(x + hb.x, y + hb.y, hb.width, hb.height);
 };
 

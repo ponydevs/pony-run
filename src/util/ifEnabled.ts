@@ -2,13 +2,13 @@
 // modified `hashhas` into `queryHas`, now testing for `?word`
 
 export const ifEnabled = (longName, shortName = '') => {
-    let queryHas = (word) => {
-        let { href } = location;
-        let text = `?${word}`;
+    const queryHas = (word) => {
+        const { href } = location;
+        const text = `?${word}`;
         return href.endsWith(text) || href.includes(`${text}?`);
     };
 
-    let test = () => {
+    const test = () => {
         let result: boolean | undefined = window[longName] as any;
         if (result === undefined && queryHas(longName)) {
             result = true;

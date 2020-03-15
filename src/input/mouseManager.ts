@@ -25,10 +25,10 @@ export interface MouseManager {
     removeAll: () => void;
 }
 
-export let createMouseManager = (prop: MouseManagerProp): MouseManager => {
-    let { element } = prop;
+export const createMouseManager = (prop: MouseManagerProp): MouseManager => {
+    const { element } = prop;
 
-    let createHandler = <T extends string>(setterName: T): Handler<T> => {
+    const createHandler = <T extends string>(setterName: T): Handler<T> => {
         const me: Handler<T> = {
             callback: undefined,
             handle: (ev) => {
@@ -46,15 +46,15 @@ export let createMouseManager = (prop: MouseManagerProp): MouseManager => {
         return me;
     };
 
-    let leftClickDown = createHandler('onLeftClickDown');
-    let leftClickUp = createHandler('onLeftClickUp');
-    let rightClick = createHandler('onRightClick');
+    const leftClickDown = createHandler('onLeftClickDown');
+    const leftClickUp = createHandler('onLeftClickUp');
+    const rightClick = createHandler('onRightClick');
 
     element.addEventListener('mousedown', leftClickDown.handle, true);
     element.addEventListener('mouseup', leftClickUp.handle, true);
     element.addEventListener('contextmenu', rightClick.handle, true);
 
-    let removeAll = () => {
+    const removeAll = () => {
         // untested // TODO?
         element.removeEventListener('mousedown', leftClickDown.handle, true);
         element.removeEventListener('mouseup', leftClickUp.handle, true);

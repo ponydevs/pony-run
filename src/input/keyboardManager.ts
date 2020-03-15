@@ -24,31 +24,33 @@ export interface KeyboardManager {
     removeAll: () => void;
 }
 
-export let createKeyboardManager = (
+export const createKeyboardManager = (
     prop: KeyboardManagerProp,
 ): KeyboardManager => {
-    let { element, evPropName } = prop;
+    const { element, evPropName } = prop;
 
     type EventMap = Record<string, (() => void) | undefined>;
     let onKeydownMap: EventMap = {};
     let onKeyupMap: EventMap = {};
 
-    let eventHandler = (closureName: string, onEventMap: EventMap) => (ev) => {
-        let key = '' + ev[evPropName];
-        let handler = onEventMap[key];
+    const eventHandler = (closureName: string, onEventMap: EventMap) => (
+        ev,
+    ) => {
+        const key = '' + ev[evPropName];
+        const handler = onEventMap[key];
         if (handler !== undefined) {
             handler();
             ev.preventDefault();
         }
     };
 
-    let handleKeydown = eventHandler('down', onKeydownMap);
-    let handleKeyup = eventHandler('up', onKeyupMap);
+    const handleKeydown = eventHandler('down', onKeydownMap);
+    const handleKeyup = eventHandler('up', onKeyupMap);
 
     element.addEventListener('keydown', handleKeydown, true);
     element.addEventListener('keyup', handleKeyup, true);
 
-    let removeAll = () => {
+    const removeAll = () => {
         // untested // TODO?
         onKeydownMap = {};
         onKeyupMap = {};
@@ -84,7 +86,7 @@ export let createKeyboardManager = (
         },
 
         onBoth: (prop) => {
-            let { key, keydown, keyup } = prop;
+            const { key, keydown, keyup } = prop;
             if (onKeydownMap[key] !== undefined) {
                 throw new Error(`keyboard event ${key}(down) assigned twice`);
             }

@@ -17,7 +17,7 @@ export const loadGifFrameList = async (
 
         reader.decodeAndBlitFrameRGBA(k, image.data as any);
 
-        let canvas = document.createElement('canvas');
+        const canvas = document.createElement('canvas');
 
         canvas.width = info.width;
         canvas.height = info.height;
