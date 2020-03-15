@@ -1,2 +1,2 @@
 #!/bin/bash
-yarn tsc --watch
+yarn tsc --watch --noEmit
