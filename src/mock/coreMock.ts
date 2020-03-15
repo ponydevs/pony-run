@@ -1,19 +1,38 @@
 import { CoreProp } from '../core/core';
 import { PonyCore } from '../type/ponyRun';
 
+const birdSpeed = -1;
+
 export const createCoreMock = (prop: CoreProp): PonyCore => {
     const { display } = prop;
 
+    let birdSpriteIndex = 0;
     let ponySpriteIndex = 0;
 
+    let birdX = 2 * 800;
+    let birdY = 50 + 50 * Math.random();
+
     const tick = (delta: number) => {
-        const scrollDelta = delta / 2;
+        const scrollDelta = -delta / 2;
+
+        birdX += scrollDelta + birdSpeed;
+
+        if (birdX < -display.bird.width) {
+            birdX = 2 * 800;
+            birdY = 50 + 150 * Math.random();
+        }
 
         display.render({
             background: {
                 scrollDelta,
             },
-            birdList: [],
+            birdList: [
+                {
+                    spriteIndex: Math.floor(birdSpriteIndex),
+                    x: birdX,
+                    y: birdY,
+                },
+            ],
             cactusList: [
                 {
                     x: 200 + scrollDelta ** 2,
@@ -27,6 +46,9 @@ export const createCoreMock = (prop: CoreProp): PonyCore => {
             score: 0,
             screen: 'play',
         });
+
+        birdSpriteIndex += 0.4;
+        birdSpriteIndex %= display.bird.frameCount;
 
         ponySpriteIndex += 0.25;
         ponySpriteIndex %= display.runningPony.frameCount;

@@ -7,7 +7,6 @@ import {
 } from '../type/ponyRun';
 import { Asset } from './asset';
 import { mod } from '../util/mod';
-import { h } from '../page/lib/hyper';
 
 export interface PonyDisplayProp {
     asset: Asset;
@@ -49,25 +48,28 @@ export const createDisplay = (prop: PonyDisplayProp): PonyDisplay => {
     };
 
     const renderBird = (bird: Bird) => {
-        ctx.drawImage(asset.cactus, bird.x, bird.y);
+        const image = asset.birdCanvasList[bird.spriteIndex];
+        ctx.drawImage(image, bird.x, bird.y);
     };
     const renderCactus = (cactus: Cactus) => {
         ctx.drawImage(asset.cactus, cactus.x, me.cactus.y);
     };
     const renderPony = async (pony: Pony) => {
-        const image = asset.ponyFrameList[pony.spriteIndex];
+        const image = asset.ponyCanvasList[pony.spriteIndex];
         ctx.drawImage(image, me.pony.x, pony.y);
     };
 
-    const me = {
+    const me: PonyDisplay = {
         bird: {
-            frameCount: 5,
+            frameCount: asset.birdCanvasList.length,
             hitbox: {
                 height: 40,
                 width: 40,
                 x: 5,
                 y: 5,
             },
+            height: asset.birdCanvasList[0].height,
+            width: asset.birdCanvasList[0].width,
         },
         cactus: {
             frameCount: 1,
@@ -78,19 +80,23 @@ export const createDisplay = (prop: PonyDisplayProp): PonyDisplay => {
                 y: 10,
             },
             y: 160,
+            height: asset.cactus.height,
+            width: asset.cactus.width,
         },
         render,
         pony: {
             x: 100,
         },
         runningPony: {
-            frameCount: asset.ponyFrameList.length,
+            frameCount: asset.ponyCanvasList.length,
             hitbox: {
-                height: 80,
+                height: 40,
                 width: 80,
                 x: 10,
                 y: 10,
             },
+            height: asset.ponyCanvasList[0].height,
+            width: asset.ponyCanvasList[0].width,
         },
     };
 

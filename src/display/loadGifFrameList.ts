@@ -1,5 +1,4 @@
 import { GifReader } from 'omggif';
-import { h } from '../page/lib/hyper';
 
 export const loadGifFrameList = async (
     gifUrl: string,
@@ -18,13 +17,13 @@ export const loadGifFrameList = async (
 
         reader.decodeAndBlitFrameRGBA(k, image.data as any);
 
-        let imageCanvas = h('canvas', {
-            width: info.width,
-            height: info.height,
-        });
+        let canvas = document.createElement('canvas');
 
-        imageCanvas.getContext('2d')!.putImageData(image, 0, 0);
+        canvas.width = info.width;
+        canvas.height = info.height;
 
-        return imageCanvas;
+        canvas.getContext('2d')!.putImageData(image, 0, 0);
+
+        return canvas;
     });
 };

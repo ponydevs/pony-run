@@ -13,7 +13,8 @@ export interface PonyCore {
 export interface PonyDisplay {
     render: (prop: PonyRenderProp) => void;
     bird: SpriteInfo;
-    cactus: SpriteInfo;
+    cactus: SpriteInfo & WithY;
+    pony: WithX;
     runningPony: SpriteInfo;
 }
 
@@ -54,6 +55,16 @@ export interface Rect {
 }
 
 export interface SpriteInfo {
-    hitbox: Rect;
     frameCount: number;
+    height: number;
+    hitbox: Rect;
+    width: number;
+}
+
+export interface WithX {
+    x: number;
+}
+
+export interface WithY {
+    y: number;
 }
