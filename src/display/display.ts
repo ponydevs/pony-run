@@ -7,6 +7,7 @@ import {
 } from '../type/ponyRun';
 import { Asset } from './asset';
 import { mod } from '../util/mod';
+import { h } from '../page/lib/hyper';
 
 export interface PonyDisplayProp {
     asset: Asset;
@@ -31,7 +32,9 @@ export const createDisplay = (prop: PonyDisplayProp): PonyDisplay => {
         a++;
 
         renderBackground(prop.background);
+        renderPony(prop.pony);
 
+        prop.birdList.forEach(renderBird);
         prop.cactusList.forEach(renderCactus);
     };
 
@@ -45,15 +48,16 @@ export const createDisplay = (prop: PonyDisplayProp): PonyDisplay => {
         }
     };
 
-    // const renderBird = (bird: Bird) => {
-    //     ctx.drawImage(asset.bird, bird.x, bird.y);
-    // };
+    const renderBird = (bird: Bird) => {
+        ctx.drawImage(asset.cactus, bird.x, bird.y);
+    };
     const renderCactus = (cactus: Cactus) => {
         ctx.drawImage(asset.cactus, cactus.x, me.cactus.y);
     };
-    // const renderPony = (pony: Pony) => {
-    //     ctx.drawImage(asset.pony, pony.x, pony.y);
-    // };
+    const renderPony = async (pony: Pony) => {
+        const image = asset.ponyFrameList[pony.spriteIndex];
+        ctx.drawImage(image, me.pony.x, pony.y);
+    };
 
     const me = {
         bird: {
@@ -77,10 +81,10 @@ export const createDisplay = (prop: PonyDisplayProp): PonyDisplay => {
         },
         render,
         pony: {
-            x: 30,
+            x: 100,
         },
         runningPony: {
-            frameCount: 5,
+            frameCount: asset.ponyFrameList.length,
             hitbox: {
                 height: 80,
                 width: 80,
