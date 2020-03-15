@@ -1,4 +1,5 @@
 import { PonyDisplay, PonyRenderProp, SpriteInfo } from '../type/ponyRun';
+import { spriteInfo } from './display';
 
 const drawHitbox = (
     ctx: CanvasRenderingContext2D,
@@ -20,5 +21,12 @@ export const showHitbox = (
     prop.cactusList.forEach(({ x }) =>
         drawHitbox(ctx, x, display.cactus.y, display.cactus),
     );
-    drawHitbox(ctx, display.pony.x, prop.pony.y, display.runningPony);
+
+    let spriteInfo;
+    if (prop.pony.spriteKind === 'run') {
+        spriteInfo = display.runningPony;
+    } else {
+        spriteInfo = display.jumpingPony;
+    }
+    drawHitbox(ctx, display.pony.x, prop.pony.y, spriteInfo);
 };

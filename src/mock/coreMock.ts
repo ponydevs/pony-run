@@ -49,7 +49,8 @@ export const createCoreMock = (prop: CoreProp): PonyCore => {
             pony: {
                 y: 176,
                 spriteIndex: Math.floor(ponySpriteIndex),
-                spriteKind: 'run',
+                spriteKind:
+                    Math.floor(ponySpriteIndex * 2) % 2 === 0 ? 'run' : 'jump',
             },
             score: Math.floor(score),
             screen: 'play',

@@ -4,6 +4,7 @@ import {
     Cactus,
     Bird,
     Pony,
+    Rect,
 } from '../type/ponyRun';
 import { Asset } from './asset';
 import { mod } from '../util/mod';
@@ -82,7 +83,14 @@ export const createDisplay = (prop: PonyDisplayProp): PonyDisplay => {
     };
 
     const renderPony = (pony: Pony) => {
-        const image = asset.ponyCanvasList[pony.spriteIndex];
+        let image: HTMLCanvasElement;
+
+        if (pony.spriteKind === 'run') {
+            image = asset.runningPonyCanvasList[pony.spriteIndex];
+        } else {
+            image = asset.jumpingPonyCanvasList[pony.spriteIndex];
+        }
+
         ctx.drawImage(image, me.pony.x, pony.y);
     };
 
@@ -95,45 +103,45 @@ export const createDisplay = (prop: PonyDisplayProp): PonyDisplay => {
     };
 
     const me: PonyDisplay = {
-        bird: {
-            frameCount: asset.birdCanvasList.length,
-            hitbox: {
-                height: 25,
-                width: 40,
-                x: 5,
-                y: 0,
-            },
-            height: asset.birdCanvasList[0].height,
-            width: asset.birdCanvasList[0].width,
-        },
-        cactus: {
-            frameCount: 1,
-            hitbox: {
-                height: 50,
-                width: 10,
-                x: 14,
-                y: 10,
-            },
-            y: 160,
-            height: asset.cactus.height,
-            width: asset.cactus.width,
-        },
+        bird: spriteInfo({}, asset.birdCanvasList, {
+            height: 15,
+            width: 40,
+            x: 5,
+            y: 10,
+        }),
+        cactus: spriteInfo({ y: 160 }, [asset.cactus], {
+            height: 50,
+            width: 10,
+            x: 14,
+            y: 10,
+        }),
         render,
         pony: {
             x: 100,
         },
-        runningPony: {
-            frameCount: asset.ponyCanvasList.length,
-            hitbox: {
-                height: 34,
-                width: 48,
-                x: 20,
-                y: 10,
-            },
-            height: asset.ponyCanvasList[0].height,
-            width: asset.ponyCanvasList[0].width,
-        },
+        runningPony: spriteInfo({}, asset.runningPonyCanvasList, {
+            height: 20,
+            width: 48,
+            x: 20,
+            y: 15,
+        }),
+        jumpingPony: spriteInfo({}, asset.jumpingPonyCanvasList, {
+            height: 35,
+            width: 30,
+            x: 15,
+            y: 15,
+        }),
     };
+
+    console.log('display', me);
 
     return me;
 };
+
+export const spriteInfo = <T>(extra: T, canvasList: any[], hitbox: Rect) => ({
+    frameCount: canvasList.length,
+    hitbox,
+    height: canvasList[0].height,
+    width: canvasList[0].width,
+    ...extra,
+});

@@ -17,6 +17,7 @@ export interface PonyDisplay {
     cactus: SpriteInfo & WithY;
     pony: WithX;
     runningPony: SpriteInfo;
+    jumpingPony: SpriteInfo;
 }
 
 export interface PonyRenderProp {
