@@ -7,6 +7,7 @@ import {
 } from '../type/ponyRun';
 import { Asset } from './asset';
 import { mod } from '../util/mod';
+import { showHitbox } from './showHitbox';
 
 export interface PonyDisplayProp {
     asset: Asset;
@@ -57,7 +58,7 @@ export const createDisplay = (prop: PonyDisplayProp): PonyDisplay => {
         );
 
         if (prop.showHitbox) {
-            // showHitbox(me, prop);
+            showHitbox(ctx, me, prop);
         }
     };
 
@@ -97,10 +98,10 @@ export const createDisplay = (prop: PonyDisplayProp): PonyDisplay => {
         bird: {
             frameCount: asset.birdCanvasList.length,
             hitbox: {
-                height: 40,
+                height: 25,
                 width: 40,
                 x: 5,
-                y: 5,
+                y: 0,
             },
             height: asset.birdCanvasList[0].height,
             width: asset.birdCanvasList[0].width,
@@ -108,9 +109,9 @@ export const createDisplay = (prop: PonyDisplayProp): PonyDisplay => {
         cactus: {
             frameCount: 1,
             hitbox: {
-                height: 90,
-                width: 20,
-                x: 10,
+                height: 50,
+                width: 10,
+                x: 14,
                 y: 10,
             },
             y: 160,
@@ -124,9 +125,9 @@ export const createDisplay = (prop: PonyDisplayProp): PonyDisplay => {
         runningPony: {
             frameCount: asset.ponyCanvasList.length,
             hitbox: {
-                height: 40,
-                width: 80,
-                x: 10,
+                height: 34,
+                width: 48,
+                x: 20,
                 y: 10,
             },
             height: asset.ponyCanvasList[0].height,
