@@ -26,6 +26,7 @@ export interface PonyRenderProp {
     screen: 'play' | 'score';
     pony: Pony;
     score: number;
+    showHitbox?: boolean;
 }
 
 export interface Background {

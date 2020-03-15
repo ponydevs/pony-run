@@ -16,8 +16,12 @@ export const createCoreMock = (prop: CoreProp): PonyCore => {
     let birdX = 2 * 800;
     let birdY = 50 + 50 * Math.random();
 
+    let score = 0;
+
     const tick = (delta: number) => {
         const scrollDelta = -delta / 2;
+
+        score += -scrollDelta;
 
         birdX += scrollDelta + birdSpeed;
 
@@ -47,8 +51,9 @@ export const createCoreMock = (prop: CoreProp): PonyCore => {
                 spriteIndex: Math.floor(ponySpriteIndex),
                 spriteKind: 'run',
             },
-            score: 0,
+            score: Math.floor(score),
             screen: 'play',
+            showHitbox: true,
         });
 
         birdSpriteIndex += 0.4;
