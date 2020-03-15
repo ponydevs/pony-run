@@ -46,7 +46,7 @@ export interface Cactus {
 
 export interface Pony {
     y: number;
-    spriteKind: 'run' | 'jump';
+    spriteKind: 'run' | 'jump' | 'crawl';
     spriteIndex: number;
 }
 
