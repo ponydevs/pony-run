@@ -1,26 +1,61 @@
-import { PonyDisplay } from '../type/ponyRun';
+import {
+    PonyDisplay,
+    PonyRenderProp,
+    Cactus,
+    Bird,
+    Pony,
+} from '../type/ponyRun';
+import { Asset } from './asset';
+import { mod } from '../util/mod';
 
 export interface PonyDisplayProp {
+    asset: Asset;
     canvas: HTMLCanvasElement;
 }
 
 export const createDisplay = (prop: PonyDisplayProp): PonyDisplay => {
     let a = 0;
 
-    const { canvas } = prop;
+    const { asset, canvas } = prop;
     const ctx = canvas.getContext('2d');
     if (ctx === null) {
         throw ctx;
     }
 
-    const render = (prop) => {
+    let bgPosX = 0;
+
+    const render = (prop: PonyRenderProp) => {
         if (a % (60 * 4) === 0) {
             console.log('render', prop);
         }
         a++;
+
+        renderBackground(prop.background);
+
+        prop.cactusList.forEach(renderCactus);
     };
 
-    return {
+    const renderBackground = (prop: PonyRenderProp['background']) => {
+        const { scrollDelta } = prop;
+        const scrollX = Math.abs(scrollDelta);
+        bgPosX = mod(bgPosX - scrollX + 800, asset.background.width) - 800;
+
+        for (let x = bgPosX; x < 800; x += asset.background.width) {
+            ctx.drawImage(asset.background, x, 0);
+        }
+    };
+
+    // const renderBird = (bird: Bird) => {
+    //     ctx.drawImage(asset.bird, bird.x, bird.y);
+    // };
+    const renderCactus = (cactus: Cactus) => {
+        ctx.drawImage(asset.cactus, cactus.x, me.cactus.y);
+    };
+    // const renderPony = (pony: Pony) => {
+    //     ctx.drawImage(asset.pony, pony.x, pony.y);
+    // };
+
+    const me = {
         bird: {
             frameCount: 5,
             hitbox: {
@@ -38,8 +73,12 @@ export const createDisplay = (prop: PonyDisplayProp): PonyDisplay => {
                 x: 10,
                 y: 10,
             },
+            y: 160,
         },
         render,
+        pony: {
+            x: 30,
+        },
         runningPony: {
             frameCount: 5,
             hitbox: {
@@ -50,4 +89,6 @@ export const createDisplay = (prop: PonyDisplayProp): PonyDisplay => {
             },
         },
     };
+
+    return me;
 };

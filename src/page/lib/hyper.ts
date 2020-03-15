@@ -11,7 +11,7 @@
  */
 export const h = <K extends keyof HTMLElementTagNameMap>(
     name: K,
-    attribute: Record<string, string> = {},
+    attribute: Record<string, any> = {},
     children: Element[] = [],
 ) => {
     const elem = document.createElement<K>(name);

@@ -4,10 +4,12 @@ import { createDisplay } from './display/display';
 import { createInput } from './input/input';
 import { schedule } from './time/schedule';
 import { createTimeManager } from './time/time';
+import { getAsset } from './display/asset';
 
-export const main = () => {
+export const main = async () => {
     const { canvas } = init();
-    const display = createDisplay({ canvas });
+    const asset = await getAsset();
+    const display = createDisplay({ asset, canvas });
     const input = createInput();
     const core = createCore({
         display,
