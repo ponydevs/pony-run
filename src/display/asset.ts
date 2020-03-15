@@ -8,14 +8,17 @@ import cactusUrl from '../../asset/cactus/cactus.png';
 import jumpingPonyGifUrl from '../../asset/pinkie/jumping-122112-resize-50.gif';
 // @ts-ignore
 import runningPonyGifUrl from '../../asset/pinkie/running-1436106.gif';
+// @ts-ignore
+import crawlingPonyGifUrl from '../../asset/pinkie/crouching-1437074.gif';
 import { promiseObjectAll } from '../util/promise';
-import { loadGifFrameList } from './loadGifFrameList';
+import { loadGifCanvasList } from './loadGifFrameList';
 import { loadImage } from './loadImage';
 
 export interface Asset {
     background: HTMLImageElement;
     birdCanvasList: HTMLCanvasElement[];
     cactus: HTMLImageElement;
+    crawlingPonyCanvasList: HTMLCanvasElement[];
     runningPonyCanvasList: HTMLCanvasElement[];
     jumpingPonyCanvasList: HTMLCanvasElement[];
 }
@@ -24,14 +27,16 @@ export const getAsset = async (): Promise<Asset> => {
     const background = loadImage(backgroundUrl);
     const cactus = loadImage(cactusUrl);
 
-    const birdCanvasList = loadGifFrameList(birdUrl);
-    const runningPonyCanvasList = loadGifFrameList(runningPonyGifUrl);
-    const jumpingPonyCanvasList = loadGifFrameList(jumpingPonyGifUrl);
+    const birdCanvasList = loadGifCanvasList(birdUrl);
+    const crawlingPonyCanvasList = loadGifCanvasList(crawlingPonyGifUrl);
+    const runningPonyCanvasList = loadGifCanvasList(runningPonyGifUrl);
+    const jumpingPonyCanvasList = loadGifCanvasList(jumpingPonyGifUrl);
 
     return promiseObjectAll<Asset>({
         background,
         birdCanvasList,
         cactus,
+        crawlingPonyCanvasList,
         runningPonyCanvasList,
         jumpingPonyCanvasList,
     });

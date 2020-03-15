@@ -1,6 +1,6 @@
 import { GifReader } from 'omggif';
 
-export const loadGifFrameList = async (
+export const loadGifCanvasList = async (
     gifUrl: string,
 ): Promise<HTMLCanvasElement[]> => {
     const response = await fetch(gifUrl);

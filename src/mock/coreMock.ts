@@ -49,8 +49,12 @@ export const createCoreMock = (prop: CoreProp): PonyCore => {
             pony: {
                 y: 176,
                 spriteIndex: Math.floor(ponySpriteIndex),
-                spriteKind:
-                    Math.floor(ponySpriteIndex * 2) % 2 === 0 ? 'run' : 'jump',
+                spriteKind: [
+                    'run' as const,
+                    'jump' as const,
+                    'crawl' as const,
+                    'crawl' as const,
+                ][Math.floor(ponySpriteIndex * 4) % 4],
             },
             score: Math.floor(score),
             screen: 'play',
@@ -60,8 +64,8 @@ export const createCoreMock = (prop: CoreProp): PonyCore => {
         birdSpriteIndex += 0.4;
         birdSpriteIndex %= display.bird.frameCount;
 
-        ponySpriteIndex += 0.25;
-        ponySpriteIndex %= display.runningPony.frameCount;
+        ponySpriteIndex += 0.05;
+        ponySpriteIndex %= display.crawlingPony.frameCount;
     };
 
     return {

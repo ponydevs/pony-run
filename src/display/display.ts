@@ -85,11 +85,15 @@ export const createDisplay = (prop: PonyDisplayProp): PonyDisplay => {
     const renderPony = (pony: Pony) => {
         let image: HTMLCanvasElement;
 
+        let list: HTMLCanvasElement[];
         if (pony.spriteKind === 'run') {
-            image = asset.runningPonyCanvasList[pony.spriteIndex];
+            list = asset.runningPonyCanvasList;
+        } else if (pony.spriteKind === 'jump') {
+            list = asset.jumpingPonyCanvasList;
         } else {
-            image = asset.jumpingPonyCanvasList[pony.spriteIndex];
+            list = asset.crawlingPonyCanvasList;
         }
+        image = list[pony.spriteIndex];
 
         ctx.drawImage(image, me.pony.x, pony.y);
     };
@@ -130,6 +134,12 @@ export const createDisplay = (prop: PonyDisplayProp): PonyDisplay => {
             width: 30,
             x: 15,
             y: 15,
+        }),
+        crawlingPony: spriteInfo({}, asset.crawlingPonyCanvasList, {
+            height: 20,
+            width: 30,
+            x: 15,
+            y: 25,
         }),
     };
 

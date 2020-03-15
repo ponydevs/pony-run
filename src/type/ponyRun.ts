@@ -18,6 +18,7 @@ export interface PonyDisplay {
     pony: WithX;
     runningPony: SpriteInfo;
     jumpingPony: SpriteInfo;
+    crawlingPony: SpriteInfo;
 }
 
 export interface PonyRenderProp {

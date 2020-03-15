@@ -25,8 +25,10 @@ export const showHitbox = (
     let spriteInfo;
     if (prop.pony.spriteKind === 'run') {
         spriteInfo = display.runningPony;
-    } else {
+    } else if (prop.pony.spriteKind === 'jump') {
         spriteInfo = display.jumpingPony;
+    } else {
+        spriteInfo = display.crawlingPony;
     }
     drawHitbox(ctx, display.pony.x, prop.pony.y, spriteInfo);
 };
