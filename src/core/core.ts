@@ -1,48 +1,55 @@
-import { PonyDisplay, PonyInput, PonyCore, Cactus } from '../type/ponyRun';
+import { PonyDisplay, PonyInput, PonyCore, PonyRenderProp } from '../type/ponyRun';
+import { createCollider, CreateCollider } from './collider';
+import { ifEnabled } from '../util/ifEnabled';
+import { createObstacles, CreateObstacles } from './obstacles';
+import { SpriteHandler, createSpriteHandler } from './sprites';
 
 export interface CoreProp {
     display: PonyDisplay;
     input: PonyInput;
 }
-
 export const createCore = (prop: CoreProp): PonyCore => {
     const { display, input } = prop;
+
+    let collider: CreateCollider;
+    let obstacles: CreateObstacles;
+    let spriteHandler: SpriteHandler;
+
     const GROUND_LEVEL = 180;
     const MAX_JUMP_LEVEL = 125;
-    const MAX_CACTUSES = 5;
-    const cactuses: Cactus[] = [];
+    const SCORE_THAT_SHOULD_STOP_ACCELERATING = 3000;
+    let MAX_SPEED = 2;
+    let START_SPEED = 1;
+    let speed = START_SPEED;
     let ponyJumpState = GROUND_LEVEL;
-    let ponySprite: 'run' | 'jump' | 'crawl' = 'run';
+
+    let godMode = false;
+    let screen: PonyRenderProp['screen'] = 'play';
     let jumping = false;
     let falling = false;
     let crouch = false;
-    let spriteIndexFloat = 0;
-    let spriteIndex = 0;
+    let jumpingAnimationProgress = -1;
     let paused = true;
     let scrollDelta = 0;
-    let speed = 1;
-    let scoreFloat = 1;
+    let scoreFloat = 0;
     let score = 0;
-    let jumpingAnimationProgress = -1;
+    let showHitbox = false;
 
-    const getRandomFloat = (min: number, max: number) => {
-        return Math.floor(Math.random() * (max - min)) + min;
-    }
-
-    const _initCactuses = () => {
-        const cactusesCount = Math.floor(MAX_CACTUSES * .75)
-        const cactusAres = 500 / cactusesCount;
-        for (let i = 0; i < cactusesCount; i++) {
-            const startArea = 250 + i * cactusAres;
-            cactuses.push({ x: getRandomFloat(startArea, startArea + cactusAres) });
-        }
-    }
-
-    const setSprite = () => {
-        if (jumping && ponySprite !== 'jump') ponySprite = 'jump';
-        else if (crouch && ponySprite !== 'crawl') ponySprite = 'crawl';
-        else if (!crouch && !jumping) ponySprite = 'run';
-    }
+    const experimental = () => {
+        ifEnabled('hitboxes').do(() => {
+            showHitbox = true;
+        });
+        ifEnabled('insanemode').do(() => {
+            START_SPEED = 2;
+        });
+        ifEnabled('slowmode').do(() => {
+            MAX_SPEED = 0.5;
+            START_SPEED = 0.5;
+        });
+        ifEnabled('godmode').do(() => {
+            godMode = true;
+        });
+    };
 
     const calculateJump = (delta: number) => {
         if (!jumping) return;
@@ -78,49 +85,24 @@ export const createCore = (prop: CoreProp): PonyCore => {
         }
     }
 
-    const animationLoop = (delta: number) => {
-        spriteIndexFloat += delta * 0.020 * speed;
 
-        if (ponySprite === 'run' && spriteIndexFloat > display.runningPony.frameCount) spriteIndexFloat = 0;
-        else if (ponySprite === 'jump') {
-            ///////////////////////////////////
-            // JUMPING 65%  / LANDING %35   //
-            //////////////////////////////////
-            const maxJumpFrame = Math.floor(display.jumpingPony.frameCount * 0.65);
+    const accelerateGame = () => {
+        speed = START_SPEED + (score * MAX_SPEED / SCORE_THAT_SHOULD_STOP_ACCELERATING);
+    }
 
-            if (jumpingAnimationProgress < 0.5) {
-                spriteIndexFloat = jumpingAnimationProgress * maxJumpFrame / 0.5
-            } else {
-                const leftJumpFrames = display.jumpingPony.frameCount - maxJumpFrame
-                spriteIndexFloat = maxJumpFrame + (jumpingAnimationProgress - 0.5) * leftJumpFrames / 0.5
+    const endGame = () => {
+        paused = true;
+        screen = 'score';
+    };
 
-            }
+    const startGame = () => {
+        if (screen === 'score') {
+            spriteHandler.reset();
+            scoreFloat = 0;
+            obstacles.reset();
+            screen = 'play';
+            speed = START_SPEED;
         }
-        else if (ponySprite === 'crawl' && spriteIndexFloat > display.crawlingPony.frameCount) spriteIndexFloat = display.crawlingPony.frameCount - 1;
-        spriteIndex = Math.floor(spriteIndexFloat);
-    }
-
-
-    const spawnCactus = () => {
-        const lastSpawnedCactus = (cactuses[cactuses.length - 1])
-        const whereItCanSpawn = lastSpawnedCactus.x + 150;
-        const range = whereItCanSpawn + 200
-        cactuses.push({ x: getRandomFloat(whereItCanSpawn, range) })
-    }
-
-    const handleCaucuses = (delta: number) => {
-        if (cactuses.length < MAX_CACTUSES) spawnCactus();
-
-        const removeCactuses: Cactus[] = [];
-
-        cactuses.forEach(c => {
-            if (c.x < 0 - display.cactus.hitbox.width) removeCactuses.push(c);
-            else c.x -= delta * 0.30 * speed;
-        });
-        removeCactuses.forEach(c => {
-            const indexOf = cactuses.indexOf(c)
-            cactuses.splice(indexOf, 1);
-        });
     }
 
     const countScore = (delta: number) => {
@@ -129,45 +111,55 @@ export const createCore = (prop: CoreProp): PonyCore => {
     }
 
     const tick = (delta: number) => {
-
+        const ob = obstacles.getObstacles();
+        const { ponySprite, spriteIndex } = spriteHandler.getSpriteInfo();
         if (!paused) {
+            spriteHandler.tick(delta, speed, jumpingAnimationProgress, jumping, crouch)
             scrollDelta = delta * 0.5 * speed;
+            obstacles.tick(delta, speed, scoreFloat);
             calculateJump(scrollDelta);
-            handleCaucuses(delta);
             countScore(delta);
-            setSprite();
-            animationLoop(delta);
-        }
+            accelerateGame();
+            if (!godMode) collider.check(ponyJumpState, ponySprite, ob)
+        } else scrollDelta = 0;
+
         display.render({
-            // showHitbox: true,
+            showHitbox,
             background: {
                 scrollDelta,
             },
-            birdList: [],
-            cactusList: cactuses,
+            birdList: ob.birdList,
+            cactusList: ob.cactusList,
             pony: {
                 y: ponyJumpState,
-                spriteIndex: spriteIndex,
+                spriteIndex,
                 spriteKind: ponySprite,
             },
             score,
-            screen: 'play',
+            screen,
         });
     };
 
     const constructor = () => {
-        _initCactuses()
+        experimental();
+        obstacles = createObstacles({ display, GROUND_LEVEL, MAX_JUMP_LEVEL });
+        collider = createCollider({ display, endGame })
+        spriteHandler = createSpriteHandler({ display });
         input.onJump(() => {
+            if (screen === 'score') startGame();
+
             if (paused) paused = false;
-            if (!crouch) jumping = true;
+            else if (!crouch) jumping = true;
         });
         input.onCrouch(() => {
+            if (screen === 'score') return;
             if (!jumping) {
-                spriteIndexFloat = 0
+                spriteHandler.onCrouch();
                 crouch = true
             };
         });
         input.onCrouchEnd(() => {
+            if (screen === 'score') return;
             crouch = false;
         });
     }
