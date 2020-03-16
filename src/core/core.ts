@@ -98,9 +98,13 @@ export const createCore = (prop: CoreProp): PonyCore => {
     const startGame = () => {
         if (screen === 'score') {
             spriteHandler.reset();
-            scoreFloat = 0;
             obstacles.reset();
+            ponyJumpState = GROUND_LEVEL;
+            crouch = false;
+            jumping = false;
+            scoreFloat = 0;
             screen = 'play';
+            jumpingAnimationProgress = -1;
             speed = START_SPEED;
         }
     }
