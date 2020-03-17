@@ -2,6 +2,7 @@ export interface PonyInput {
     onJump: RegisterFunction;
     onCrouch: RegisterFunction;
     onCrouchEnd: RegisterFunction;
+    onTogglePause: RegisterFunction;
     removeAll: () => void;
 }
 

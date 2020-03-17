@@ -1,4 +1,4 @@
-import { CallbackSetter } from './callbackType';
+import { RegisterFunction } from '../type/ponyRun';
 
 export interface MouseManagerProp {
     element: HTMLElement;
@@ -11,14 +11,14 @@ export interface Handler<T extends string> {
 }
 
 export type NamedCallbackSetter<T extends string> = {
-    [K in T]: CallbackSetter;
+    [K in T]: RegisterFunction;
 };
 
 export interface MouseManager {
-    onLeftClickDown: CallbackSetter;
-    onLeftClickUp: CallbackSetter;
-    onRightClickDown: CallbackSetter;
-    onRightClickUp: CallbackSetter;
+    onLeftClickDown: RegisterFunction;
+    onLeftClickUp: RegisterFunction;
+    onRightClickDown: RegisterFunction;
+    onRightClickUp: RegisterFunction;
     removeAll: () => void;
 }
 

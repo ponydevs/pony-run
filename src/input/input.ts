@@ -25,8 +25,13 @@ export const createInput = (): PonyInput => {
             keyboard.onKeydown(' ', callback);
             mouse.onLeftClickDown(callback);
         },
+        onTogglePause: (callback: () => void) => {
+            keyboard.onKeydown('p', callback);
+            keyboard.onKeydown('P', callback);
+        },
         removeAll: () => {
             keyboard.removeAll();
+            mouse.removeAll();
         },
     };
 };

@@ -1,8 +1,8 @@
-import { CallbackSetter } from './callbackType';
+import { RegisterFunction } from '../type/ponyRun';
 
 export interface WindowFocusManager {
-    onBlur: CallbackSetter;
-    onFocus: CallbackSetter;
+    onBlur: RegisterFunction;
+    onFocus: RegisterFunction;
     removeAll: () => void;
 }
 

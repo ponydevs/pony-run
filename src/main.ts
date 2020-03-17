@@ -2,12 +2,12 @@ import { createCore } from './core/core';
 import { getAsset } from './display/asset';
 import { createDisplay } from './display/display';
 import { createInput } from './input/input';
+import { createWindowFocusManager } from './input/windowFocusManager';
 import { createCoreMock } from './mock/coreMock';
 import { init } from './page/init';
+import { createTickManager } from './time/tickManager';
 import { createTimeManager } from './time/timeManager';
 import { ifEnabled } from './util/ifEnabled';
-import { createTickManager } from './time/tickManager';
-import { createWindowFocusManager } from './input/windowFocusManager';
 
 export const main = async () => {
     const { canvas } = init();
@@ -26,10 +26,8 @@ export const main = async () => {
         });
     });
 
-    const timeManager = createTimeManager();
-
     const tickManager = createTickManager({
-        timeManager,
+        timeManager: createTimeManager(),
         tick: core.tick,
     });
 
@@ -37,6 +35,8 @@ export const main = async () => {
 
     windowFocusManager.onBlur(tickManager.pause);
     windowFocusManager.onFocus(tickManager.start);
+
+    input.onTogglePause(tickManager.togglePause);
 
     tickManager.start();
 };

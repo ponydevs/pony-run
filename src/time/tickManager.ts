@@ -3,6 +3,7 @@ import { TimeManager } from './timeManager';
 export interface TickManager {
     start: () => void;
     pause: () => void;
+    togglePause: () => void;
 }
 
 export interface TickManagerProp {
@@ -22,7 +23,7 @@ export const createTickManager = (prop: TickManagerProp): TickManager => {
         }
     };
 
-    return {
+    const me = {
         start: () => {
             running = true;
             timeManager.start();
@@ -32,5 +33,14 @@ export const createTickManager = (prop: TickManagerProp): TickManager => {
             running = false;
             timeManager.pause();
         },
+        togglePause: () => {
+            if (running) {
+                me.pause();
+            } else {
+                me.start();
+            }
+        },
     };
+
+    return me;
 };
