@@ -4,9 +4,10 @@ import { createDisplay } from './display/display';
 import { createInput } from './input/input';
 import { createCoreMock } from './mock/coreMock';
 import { init } from './page/init';
-import { schedule } from './time/schedule';
-import { createTimeManager } from './time/time';
+import { createTimeManager } from './time/timeManager';
 import { ifEnabled } from './util/ifEnabled';
+import { createTickManager } from './time/tickManager';
+import { createWindowFocusManager } from './input/windowFocusManager';
 
 export const main = async () => {
     const { canvas } = init();
@@ -25,12 +26,17 @@ export const main = async () => {
         });
     });
 
-    const time = createTimeManager();
+    const timeManager = createTimeManager();
 
-    const mainLoop = schedule(() => {
-        core.tick(time.delta());
-    }, requestAnimationFrame);
+    const tickManager = createTickManager({
+        timeManager,
+        tick: core.tick,
+    });
 
-    time.start();
-    mainLoop();
+    const windowFocusManager = createWindowFocusManager({ window });
+
+    windowFocusManager.onBlur(tickManager.pause);
+    windowFocusManager.onFocus(tickManager.start);
+
+    tickManager.start();
 };

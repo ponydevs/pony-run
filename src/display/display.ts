@@ -21,8 +21,6 @@ export interface Position {
 }
 
 export const createDisplay = (prop: PonyDisplayProp): PonyDisplay => {
-    let frameIndex = 0;
-
     const { asset, canvas } = prop;
     const ctx = canvas.getContext('2d');
     if (ctx === null) {
@@ -42,11 +40,6 @@ export const createDisplay = (prop: PonyDisplayProp): PonyDisplay => {
     };
 
     const render = (prop: PonyRenderProp) => {
-        if (frameIndex % (60 * 4) === 0) {
-            console.log('render', prop);
-        }
-        frameIndex++;
-
         renderBackground(prop.background);
         renderPony(prop.pony);
 

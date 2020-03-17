@@ -1,6 +1,4 @@
-export interface WithRemover {
-    remove: () => void;
-}
+import { CallbackSetter } from './callbackType';
 
 export interface MouseManagerProp {
     element: HTMLElement;
@@ -9,20 +7,18 @@ export interface MouseManagerProp {
 export interface Handler<T extends string> {
     callback?: () => void;
     handle: (ev: any) => void;
-    callbackSetter: CallbackSetter<T>;
+    callbackSetter: NamedCallbackSetter<T>;
 }
 
-export type CallbackSetter<T extends string> = {
-    [K in T]: SetCallback;
+export type NamedCallbackSetter<T extends string> = {
+    [K in T]: CallbackSetter;
 };
 
-export type SetCallback = (callback: () => void) => void;
-
 export interface MouseManager {
-    onLeftClickDown: SetCallback;
-    onLeftClickUp: SetCallback;
-    onRightClickDown: SetCallback;
-    onRightClickUp: SetCallback;
+    onLeftClickDown: CallbackSetter;
+    onLeftClickUp: CallbackSetter;
+    onRightClickDown: CallbackSetter;
+    onRightClickUp: CallbackSetter;
     removeAll: () => void;
 }
 
@@ -42,7 +38,7 @@ export const createMouseManager = (prop: MouseManagerProp): MouseManager => {
                 [setterName]: (callback: () => void) => {
                     me.callback = callback;
                 },
-            } as CallbackSetter<T>,
+            } as NamedCallbackSetter<T>,
         };
         return me;
     };
