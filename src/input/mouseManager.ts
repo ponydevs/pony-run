@@ -21,7 +21,8 @@ export type SetCallback = (callback: () => void) => void;
 export interface MouseManager {
     onLeftClickDown: SetCallback;
     onLeftClickUp: SetCallback;
-    onRightClick: SetCallback;
+    onRightClickDown: SetCallback;
+    onRightClickUp: SetCallback;
     removeAll: () => void;
 }
 
@@ -31,7 +32,7 @@ export const createMouseManager = (prop: MouseManagerProp): MouseManager => {
     const createHandler = <T extends string>(setterName: T): Handler<T> => {
         const me: Handler<T> = {
             callback: undefined,
-            handle: (ev) => {
+            handle: (ev: MouseEvent) => {
                 if (me.callback !== undefined) {
                     me.callback();
                     ev.preventDefault();
@@ -48,23 +49,42 @@ export const createMouseManager = (prop: MouseManagerProp): MouseManager => {
 
     const leftClickDown = createHandler('onLeftClickDown');
     const leftClickUp = createHandler('onLeftClickUp');
-    const rightClick = createHandler('onRightClick');
+    const rightClickDown = createHandler('onRightClickDown');
+    const rightClickUp = createHandler('onRightClickUp');
 
-    element.addEventListener('mousedown', leftClickDown.handle, true);
-    element.addEventListener('mouseup', leftClickUp.handle, true);
-    element.addEventListener('contextmenu', rightClick.handle, true);
+    const handleDown = (ev: MouseEvent) => {
+        ({
+            [0]: leftClickDown.handle,
+            [2]: rightClickDown.handle,
+        }[ev.button]?.(ev));
+    };
+
+    const handleUp = (ev: MouseEvent) => {
+        if (ev.button === 0) {
+            leftClickUp.handle(ev);
+        }
+    };
+
+    const handleRightUp = (ev: MouseEvent) => {
+        rightClickUp.handle(ev);
+    };
+
+    element.addEventListener('mousedown', handleDown, true);
+    element.addEventListener('mouseup', handleUp, true);
+    element.addEventListener('contextmenu', handleRightUp, true);
 
     const removeAll = () => {
         // untested // TODO?
-        element.removeEventListener('mousedown', leftClickDown.handle, true);
-        element.removeEventListener('mouseup', leftClickUp.handle, true);
-        element.removeEventListener('contextmenu', rightClick.handle, true);
+        element.removeEventListener('mousedown', handleDown, true);
+        element.removeEventListener('mouseup', handleUp, true);
+        element.removeEventListener('contextmenu', handleRightUp, true);
     };
 
     return {
         ...leftClickDown.callbackSetter,
         ...leftClickUp.callbackSetter,
-        ...rightClick.callbackSetter,
+        ...rightClickDown.callbackSetter,
+        ...rightClickUp.callbackSetter,
         removeAll,
     };
 };

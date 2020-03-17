@@ -15,15 +15,15 @@ export const createInput = (): PonyInput => {
     return {
         onCrouch: (callback: () => void) => {
             keyboard.onKeydown('Shift', callback);
-            mouse.onLeftClickDown(callback);
+            mouse.onRightClickDown(callback);
         },
         onCrouchEnd: (callback: () => void) => {
             keyboard.onKeyup('Shift', callback);
-            mouse.onLeftClickUp(callback);
+            mouse.onRightClickUp(callback);
         },
         onJump: (callback: () => void) => {
             keyboard.onKeydown(' ', callback);
-            mouse.onRightClick(callback);
+            mouse.onLeftClickDown(callback);
         },
         removeAll: () => {
             keyboard.removeAll();
