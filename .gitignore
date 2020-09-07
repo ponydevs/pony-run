@@ -3,6 +3,8 @@
 tmp/
 
 !/src/
+!/asset/
+!/cypress/
 
 # Files
 /.*
